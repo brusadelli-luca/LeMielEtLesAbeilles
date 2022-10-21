@@ -16,10 +16,11 @@ integrity_test = False
 
 # Img output
 img_creation = True
+all_img = False
 
 # Mutation
 natural_rate = 0.000
-stagnation_rate = 0.01
+stagnation_rate = 0.1
 var_mut = False
 
 # Stagnation definition
@@ -91,7 +92,7 @@ for param in param_list:
         evol[0].append(round((evol[graf_nb][i-1]-evol[graf_nb][i])/evol[graf_nb][i-1]*100,2))
                     
         # Last generation hive routes if ON
-        if img_creation: # and i == gen_nb - 1:
+        if img_creation and (all_img or i == gen_nb - 1):
             # field = flower_coord_import('Champ de pissenlits et de sauge des pres')
             createJPG(field,hive1,'gen ' + str(i),freq_wdth=True)
  
@@ -113,7 +114,16 @@ for param in param_list:
                 for bee in hive1.bees:
                     bee.Mutation(rate=stagnation_rate)
 
-print('Execution time',round(time.time()-start_time,2),'s')
+
+print('\nSelection method : ' + input_method + '\nSort population size  : ' + str(sort_pop) \
+            + '\nCrossover sequence lenght : ' + str(seq_len) \
+            + '\nNatural mutation rate : ' + str(natural_rate) + '\nStagnation mutation rate : ' + str(stagnation_rate) \
+            + '\nVariable mutation rate : ' + str(var_mut) \
+            + '\nStagnation generation comparison : ' + str(stag_gen) + '\nStagnation thresold  : ' + str(stagnation_def))
+
+print('\nFirst generation mean score : '+ str(evol[graf_nb][0]) + '\nLast generation mean score : ' + str(evol[graf_nb][-1]))
+
+print('\nExecution time',round(time.time()-start_time,2),'s\n')
 
 # Plotting evolution scores
 
@@ -121,9 +131,10 @@ gen = [*range(0,i+1,1)]
 
 for i in range(0,len(param_list)):
     # + '\nSort pop size  : ' + str(sort_pop) \
-    plt.plot(gen,evol[i+1],label= 'Sorting method : ' + input_method + '\nSort pop size  : ' + str(sort_pop) \
+    plt.plot(gen,evol[i+1],label= 'Select method : ' + input_method + '\nSort pop size  : ' + str(sort_pop) \
             + '\nCrossover seq len : ' + str(seq_len) \
             + '\nNatural mutation rate : ' + str(natural_rate) + '\nStag mutation rate : ' + str(stagnation_rate) \
+            + '\nVariable mutation rate : ' + str(var_mut) \
             + '\nStag gen comp : ' + str(stag_gen) + '\nStag thresold  : ' + str(stagnation_def))
             
 
