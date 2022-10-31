@@ -2,12 +2,7 @@ import csv
 import math
 import random
 
-# Necessary functions : 
-    # Import flower coordinates
-    # Manhattan distance evaluation
-    # Euclidian distance evaluation
-    # Single point crossover
-    # Two points crossover
+# Necessary functions
 
 
 # Import flower coord from given csv file

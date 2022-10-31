@@ -1,5 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
+# Creates flowers and routes img viz
+
 def createJPG(field,hive,filename, show = False, fastest = False, freq_wdth = False, bee_start = 0, bee_stop = 100):
     
     # Img size definition

@@ -36,7 +36,7 @@ param_list = [1] #,5,10]
 graf_nb = 0
 
 # Evolution
-gen_nb = 500
+gen_nb = 5000
 seq_len = 35
 evol=[]
 

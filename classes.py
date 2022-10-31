@@ -2,14 +2,6 @@ from functions import *
 import random
 
 # Bee class creation : 
-    # chromosome = route
-    # distance = 1 / fitness
-    # dist_calc = distance evaluation method
-
-    # repair = crossover chromosome completion
-    # mutation = gene mutation method
-    # integrity = bee chromosome integrity check
-
 class Bee():
     def __init__(self,field):
         self.route = [[500,500]] + random.sample(field,50) + [[500,500]]
@@ -61,13 +53,9 @@ class Bee():
 
 
 # Hive class creation : 
-    # bees = list of bees initiated with fitness
+    # bees = list of bees with fitness
     # method = selection method
     # sort_pop = population size if using sort selection method
-
-    # Selection = selects bees for reproduction (roulette / random / sort)
-    # average dist = population average fitness evalutation method
-    # integrity = hive bees chromosome integrity check
 
 class Hive():
     def __init__(self, field, method = 'sort', sort_pop = 50):
