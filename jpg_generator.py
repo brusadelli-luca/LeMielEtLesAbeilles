@@ -33,6 +33,9 @@ def createJPG(field,hive,filename, show = False, fastest = False, freq_wdth = Fa
         freq = [[(0,0,0,0)]]
         freq.append([0])
 
+    # Font loaded once (used to write the generation number)
+    font = ImageFont.truetype("arial.ttf",76)
+
     # Loop on bees in hive
     for bee in hive.bees[bee_start:bee_stop]:
 
@@ -67,7 +70,6 @@ def createJPG(field,hive,filename, show = False, fastest = False, freq_wdth = Fa
             
             draw.line(line_tuple, fill=color, width=wdth)
             
-        font = ImageFont.truetype("arial.ttf",76)
         draw.text((2700,300), filename.split(' ')[-1],fill=(0,0,0), font=font)
             
     # Show img if option is True

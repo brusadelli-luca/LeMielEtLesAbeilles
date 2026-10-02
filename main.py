@@ -127,11 +127,9 @@ print('\nExecution time',round(time.time()-start_time,2),'s\n')
 
 # Plotting evolution scores
 
-gen = [*range(0,i+1,1)]
-
 for i in range(0,len(param_list)):
     # + '\nSort pop size  : ' + str(sort_pop) \
-    plt.plot(gen,evol[i+1],label= 'Select method : ' + input_method + '\nSort pop size  : ' + str(sort_pop) \
+    plt.plot(range(len(evol[i+1])),evol[i+1],label= 'Select method : ' + input_method + '\nSort pop size  : ' + str(sort_pop) \
             + '\nCrossover seq len : ' + str(seq_len) \
             + '\nNatural mutation rate : ' + str(natural_rate) + '\nStag mutation rate : ' + str(stagnation_rate) \
             + '\nVariable mutation rate : ' + str(var_mut) \

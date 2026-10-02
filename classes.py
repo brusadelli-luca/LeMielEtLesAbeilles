@@ -4,6 +4,7 @@ import random
 # Bee class creation : 
 class Bee():
     def __init__(self,field):
+        self.field = field
         self.route = [[500,500]] + random.sample(field,50) + [[500,500]]
         self.dist = self.dist_calc()
 
@@ -20,7 +21,7 @@ class Bee():
 
     # Replaces double coordinates (= genes) with missing coordinates
     def Repair(self):
-        field = flower_coord_import('Champ de pissenlits et de sauge des pres')
+        field = self.field
         missing = []
 
         for flower in field:
@@ -41,6 +42,7 @@ class Bee():
             tmp = self.route[k[0]]
             self.route[k[0]] = self.route[k[1]]
             self.route[k[1]] = tmp
+            self.dist = self.dist_calc()
             
 
     # Checks if bee route (= chromosome) has correct structure
