@@ -74,6 +74,8 @@ class Hive():
     # Bee selection method : roulette / random / sort
     def Selection(self):
         if self.method == 'roulette':
+            # Bees are ranked by distance (best first) : position k = rank k
+            self.bees = sorted(self.bees, key=lambda bee: bee.dist)
             tmp_bees = []
             for k in range(100):
                 rd = random.random()
