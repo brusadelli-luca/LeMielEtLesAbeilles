@@ -1,6 +1,7 @@
 from functions import flower_coord_import, single_pt_crossover, two_pts_crossover
 from classes import Hive
 from jpg_generator import create_jpg
+from constants import NB_PARENTS
 
 import matplotlib.pyplot as plt
 import time
@@ -59,12 +60,12 @@ for param in param_list:
 
     # Loop on generation number
     for i in range(1,gen_nb):
-        for j in range(0,50,2):
+        for j in range(0,NB_PARENTS,2):
             parent1 = hive1.bees[j]
             parent2 = hive1.bees[j+1]
             
-            child1 = hive1.bees[j+50]
-            child2 = hive1.bees[j+51]
+            child1 = hive1.bees[j+NB_PARENTS]
+            child2 = hive1.bees[j+NB_PARENTS+1]
 
             # Bee reproduction
             if seq_len == 0:

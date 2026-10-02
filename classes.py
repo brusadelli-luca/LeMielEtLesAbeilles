@@ -1,11 +1,12 @@
 import random
 from functions import manhattan
+from constants import NB_FLOWERS, NB_BEES, HIVE, ROUTE_LEN
 
 # Bee class creation : 
 class Bee():
     def __init__(self,field):
         self.field = field
-        self.route = [[500,500]] + random.sample(field,50) + [[500,500]]
+        self.route = [HIVE] + random.sample(field,NB_FLOWERS) + [HIVE]
         self.dist = self.dist_calc()
 
 
@@ -13,7 +14,7 @@ class Bee():
     def dist_calc(self):
         dist = 0
 
-        for i in range(51):
+        for i in range(ROUTE_LEN - 1):
             dist = dist + manhattan(self.route[i],self.route[i+1])
 
         return dist
@@ -29,8 +30,8 @@ class Bee():
                 missing.append(flower)
         
         for i_miss in range(len(missing)):
-            for j1 in range(1,51):
-                for j2 in range(1,51):
+            for j1 in range(1,NB_FLOWERS + 1):
+                for j2 in range(1,NB_FLOWERS + 1):
                     if (self.route[j1] == self.route[j2]) and (j1 != j2):
                         self.route[j1] = missing[i_miss]
         
@@ -38,7 +39,7 @@ class Bee():
     # Swaps two coordinates (= genes) in bee route
     def mutation(self,rate=0):
         if random.random() < rate:
-            k = random.sample(range(1, 51), 2)
+            k = random.sample(range(1, NB_FLOWERS + 1), 2)
             tmp = self.route[k[0]]
             self.route[k[0]] = self.route[k[1]]
             self.route[k[1]] = tmp
@@ -49,7 +50,7 @@ class Bee():
     def integrity(self, field):
               
         for flwr in field:
-            if (not flwr in self.route) or ([500, 500] in self.route[1:51]):
+            if (not flwr in self.route) or (HIVE in self.route[1:NB_FLOWERS + 1]):
                 return False
         return True
 
@@ -66,7 +67,7 @@ class Hive():
         self.method = method
         self.sort_pop = sort_pop
 
-        for i in range(100):
+        for i in range(NB_BEES):
             self.bees.append(Bee(field))
         
         self.selection()
@@ -77,13 +78,13 @@ class Hive():
             # Bees are ranked by distance (best first) : position k = rank k
             self.bees = sorted(self.bees, key=lambda bee: bee.dist)
             tmp_bees = []
-            for k in range(100):
+            for k in range(NB_BEES):
                 rd = random.random()
 
-                if rd < (1 - 3 * k / 100):
+                if rd < (1 - 3 * k / NB_BEES):
                     tmp_bees.append(self.bees[k])
             
-            if len(tmp_bees) < 100:
+            if len(tmp_bees) < NB_BEES:
                 
                 tmp_bees_2 = sorted(self.bees, key=lambda bee: bee.dist)
                 
@@ -95,12 +96,12 @@ class Hive():
 
         elif self.method == 'random':
 
-            self.bees = random.sample(self.bees[0:100], 100)
+            self.bees = random.sample(self.bees[0:NB_BEES], NB_BEES)
 
         else:
             # self.method == 'sort'
             tmp_bees = sorted(self.bees, key=lambda bee: bee.dist)
-            self.bees = random.sample(tmp_bees[0:self.sort_pop], self.sort_pop) + tmp_bees[self.sort_pop:100]
+            self.bees = random.sample(tmp_bees[0:self.sort_pop], self.sort_pop) + tmp_bees[self.sort_pop:NB_BEES]
 
 
     # Calculates average distance (= score) in hive
@@ -109,7 +110,7 @@ class Hive():
         for bee in self.bees:
             hive_dist = hive_dist + bee.dist
         
-        return hive_dist/100
+        return hive_dist/NB_BEES
 
     # Checks if each bee route (= chromosome) in hive has correct structure
     def integrity(self):

@@ -1,6 +1,8 @@
 import csv
 import random
 
+from constants import NB_FLOWERS, ROUTE_LEN
+
 # Necessary functions
 
 
@@ -29,10 +31,10 @@ def manhattan(fl1,fl2):
 # Bee reproduction with single point crossover technique
 def single_pt_crossover(parent1, parent2, child1, child2):
     
-    k = random.randint(1, 51)
+    k = random.randint(1, ROUTE_LEN - 1)
 
-    child1.route = parent1.route[0:k] + parent2.route[k:53] 
-    child2.route = parent2.route[0:k] + parent1.route[k:53]
+    child1.route = parent1.route[0:k] + parent2.route[k:ROUTE_LEN] 
+    child2.route = parent2.route[0:k] + parent1.route[k:ROUTE_LEN]
 
     child1.repair()
     child2.repair()
@@ -46,21 +48,21 @@ def two_pts_crossover(parent1, parent2, child1, child2, lrg = 0):
     
     if lrg == 0:
 
-        k = sorted(random.sample(range(2, 51), 2))
+        k = sorted(random.sample(range(2, NB_FLOWERS + 1), 2))
     
     else:
         k = []
-        k.append(random.randint(2, 51))
+        k.append(random.randint(2, ROUTE_LEN - 1))
         
-        if k[0] >= 26:
+        if k[0] > NB_FLOWERS // 2:
             k.append(max(1, k[0]-lrg))
         else:
-            k.append(min(50, k[0]+lrg))
+            k.append(min(NB_FLOWERS, k[0]+lrg))
 
         k = sorted(k)
 
-    child1.route = parent1.route[0:k[0]] + parent2.route[k[0]:k[1]] + parent1.route[k[1]:52] 
-    child2.route = parent2.route[0:k[0]] + parent1.route[k[0]:k[1]] + parent2.route[k[1]:52]
+    child1.route = parent1.route[0:k[0]] + parent2.route[k[0]:k[1]] + parent1.route[k[1]:ROUTE_LEN] 
+    child2.route = parent2.route[0:k[0]] + parent1.route[k[0]:k[1]] + parent2.route[k[1]:ROUTE_LEN]
 
     child1.repair()
     child2.repair()

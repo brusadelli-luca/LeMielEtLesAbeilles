@@ -1,8 +1,10 @@
 from PIL import Image, ImageDraw, ImageFont
 
+from constants import NB_BEES, HIVE, ROUTE_LEN
+
 # Creates flowers and routes img viz
 
-def create_jpg(field,hive,filename, show = False, fastest = False, freq_wdth = False, bee_start = 0, bee_stop = 100):
+def create_jpg(field,hive,filename, show = False, fastest = False, freq_wdth = False, bee_start = 0, bee_stop = NB_BEES):
     
     # Img size definition
     size = 1000
@@ -13,8 +15,8 @@ def create_jpg(field,hive,filename, show = False, fastest = False, freq_wdth = F
 
 
     # Hive tree location
-    x = 500 - 5
-    y = 500 - 5
+    x = HIVE[0] - 5
+    y = HIVE[1] - 5
     draw.rectangle((scale*x, scale*y, scale*(x+10), scale*(y+10)), fill=(101, 67, 33), width=30)
     
     # Flower locations
@@ -49,7 +51,7 @@ def create_jpg(field,hive,filename, show = False, fastest = False, freq_wdth = F
                 line_width = 1   
 
         # Lines definition
-        for i in range(51):
+        for i in range(ROUTE_LEN - 1):
             x1 = bee.route[i][0]
             y1 = bee.route[i][1]
 
