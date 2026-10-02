@@ -1,37 +1,42 @@
 from PIL import Image, ImageDraw, ImageFont
 
+from constants import NB_BEES, HIVE, ROUTE_LEN
+
 # Creates flowers and routes img viz
 
-def createJPG(field,hive,filename, show = False, fastest = False, freq_wdth = False, bee_start = 0, bee_stop = 100):
+def create_jpg(field,hive,filename, show = False, fastest = False, freq_wdth = False, bee_start = 0, bee_stop = NB_BEES):
     
     # Img size definition
     size = 1000
-    large = 3 * size
-    img = Image.new('RGB', (large, large), (126, 200, 80))
-    t = large//size
+    image_size = 3 * size
+    img = Image.new('RGB', (image_size, image_size), (126, 200, 80))
+    scale = image_size//size
     draw = ImageDraw.Draw(img)
 
 
     # Hive tree location
-    x = 500 - 5
-    y = 500 - 5
-    draw.rectangle((t*x, t*y, t*(x+10), t*(y+10)), fill=(101, 67, 33), width=30)
+    x = HIVE[0] - 5
+    y = HIVE[1] - 5
+    draw.rectangle((scale*x, scale*y, scale*(x+10), scale*(y+10)), fill=(101, 67, 33), width=30)
     
     # Flower locations
     for flower in field:
         x = flower[0] - 5
         y = flower[1] - 5
-        draw.rectangle((t*x, t*y, t*(x+10), t*(y+10)), fill=(255, 255, 0), width=10)
+        draw.rectangle((scale*x, scale*y, scale*(x+10), scale*(y+10)), fill=(255, 255, 0), width=10)
 
 
     # Routes
     color = (0, 0, 0)
-    wdth = 1
+    line_width = 1
 
     # Initiator if Increase width with traffic is True
     if freq_wdth:
         freq = [[(0,0,0,0)]]
         freq.append([0])
+
+    # Font loaded once (used to write the generation number)
+    font = ImageFont.truetype("arial.ttf",76)
 
     # Loop on bees in hive
     for bee in hive.bees[bee_start:bee_stop]:
@@ -40,19 +45,19 @@ def createJPG(field,hive,filename, show = False, fastest = False, freq_wdth = Fa
         if fastest: 
             if hive.bees.index(bee) == 0:
                 color = (255, 0, 0)
-                wdth = 5
+                line_width = 5
             else:
                 color = (0, 0, 0)
-                wdth = 1   
+                line_width = 1   
 
         # Lines definition
-        for i in range(51):
+        for i in range(ROUTE_LEN - 1):
             x1 = bee.route[i][0]
             y1 = bee.route[i][1]
 
             x2 = bee.route[i+1][0]
             y2 = bee.route[i+1][1]
-            line_tuple = (t*x1, t*y1, t*x2, t*y2)
+            line_tuple = (scale*x1, scale*y1, scale*x2, scale*y2)
             
             # With increasing along traffic if option is True
             if freq_wdth:
@@ -63,11 +68,10 @@ def createJPG(field,hive,filename, show = False, fastest = False, freq_wdth = Fa
                     freq[0].append(line_tuple)
                     freq[1].append(1)
             
-                wdth = int(freq[1][freq[0].index(line_tuple)]/10)
+                line_width = int(freq[1][freq[0].index(line_tuple)]/10)
             
-            draw.line(line_tuple, fill=color, width=wdth)
+            draw.line(line_tuple, fill=color, width=line_width)
             
-        font = ImageFont.truetype("arial.ttf",76)
         draw.text((2700,300), filename.split(' ')[-1],fill=(0,0,0), font=font)
             
     # Show img if option is True

@@ -1,6 +1,7 @@
-from functions import *
-from classes import *
-from jpg_generator import *
+from functions import flower_coord_import, single_pt_crossover, two_pts_crossover
+from classes import Hive
+from jpg_generator import create_jpg
+from constants import NB_PARENTS
 
 import matplotlib.pyplot as plt
 import time
@@ -55,32 +56,32 @@ for param in param_list:
     # First generation hive routes if ON
     if img_creation:
         # field = flower_coord_import('Champ de pissenlits et de sauge des pres')
-        createJPG(field,hive1,'gen ' + str(0),freq_wdth=True)
+        create_jpg(field,hive1,'gen ' + str(0),freq_wdth=True)
 
     # Loop on generation number
     for i in range(1,gen_nb):
-        for j in range(0,50,2):
-            bee_P1 = hive1.bees[j]
-            bee_P2 = hive1.bees[j+1]
+        for j in range(0,NB_PARENTS,2):
+            parent1 = hive1.bees[j]
+            parent2 = hive1.bees[j+1]
             
-            bee_D1 = hive1.bees[j+50]
-            bee_S2 = hive1.bees[j+51]
+            child1 = hive1.bees[j+NB_PARENTS]
+            child2 = hive1.bees[j+NB_PARENTS+1]
 
             # Bee reproduction
             if seq_len == 0:
-                single_pt_crossover(bee_P1, bee_P2, bee_D1, bee_S2)
+                single_pt_crossover(parent1, parent2, child1, child2)
 
             else:
-                two_pts_crossover(bee_P1, bee_P2, bee_D1, bee_S2,lrg=seq_len)
+                two_pts_crossover(parent1, parent2, child1, child2,lrg=seq_len)
 
 
             # If natural mutation ON
             if natural_rate !=0:
-                bee_D1.Mutation(rate=natural_rate)
-                bee_S2.Mutation(rate=natural_rate)
+                child1.mutation(rate=natural_rate)
+                child2.mutation(rate=natural_rate)
 
         # Bee selection in hive   
-        hive1.Selection()
+        hive1.selection()
 
         # Integrity check if ON
         if integrity_test:
@@ -94,7 +95,7 @@ for param in param_list:
         # Last generation hive routes if ON
         if img_creation and (all_img or i == gen_nb - 1):
             # field = flower_coord_import('Champ de pissenlits et de sauge des pres')
-            createJPG(field,hive1,'gen ' + str(i),freq_wdth=True)
+            create_jpg(field,hive1,'gen ' + str(i),freq_wdth=True)
  
         # Mutation when evolution stagnates
         if i > stag_gen:
@@ -112,7 +113,7 @@ for param in param_list:
 
                 # print('Mutation at generation',i)
                 for bee in hive1.bees:
-                    bee.Mutation(rate=stagnation_rate)
+                    bee.mutation(rate=stagnation_rate)
 
 
 print('\nSelection method : ' + input_method + '\nSort population size  : ' + str(sort_pop) \
@@ -127,11 +128,9 @@ print('\nExecution time',round(time.time()-start_time,2),'s\n')
 
 # Plotting evolution scores
 
-gen = [*range(0,i+1,1)]
-
 for i in range(0,len(param_list)):
     # + '\nSort pop size  : ' + str(sort_pop) \
-    plt.plot(gen,evol[i+1],label= 'Select method : ' + input_method + '\nSort pop size  : ' + str(sort_pop) \
+    plt.plot(range(len(evol[i+1])),evol[i+1],label= 'Select method : ' + input_method + '\nSort pop size  : ' + str(sort_pop) \
             + '\nCrossover seq len : ' + str(seq_len) \
             + '\nNatural mutation rate : ' + str(natural_rate) + '\nStag mutation rate : ' + str(stagnation_rate) \
             + '\nVariable mutation rate : ' + str(var_mut) \
