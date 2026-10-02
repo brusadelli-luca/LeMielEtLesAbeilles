@@ -1,5 +1,4 @@
 import csv
-import math
 import random
 
 # Necessary functions
@@ -21,12 +20,6 @@ def flower_coord_import(file_name):
     return field
 
 
-# Calculate distance with euclidian definition
-def euclidian(fl1,fl2):
-
-    return math.sqrt((fl2[0] - fl1[0]) **2 + (fl2[1] - fl1[1]) **2)
-
-
 # Calculate distance with mahattan definition
 def manhattan(fl1,fl2):
 
@@ -34,22 +27,22 @@ def manhattan(fl1,fl2):
 
 
 # Bee reproduction with single point crossover technique
-def single_pt_crossover(bee_P1, bee_P2, bee_D1, bee_S2):
+def single_pt_crossover(parent1, parent2, child1, child2):
     
     k = random.randint(1, 51)
 
-    bee_D1.route = bee_P1.route[0:k] + bee_P2.route[k:53] 
-    bee_S2.route = bee_P2.route[0:k] + bee_P1.route[k:53]
+    child1.route = parent1.route[0:k] + parent2.route[k:53] 
+    child2.route = parent2.route[0:k] + parent1.route[k:53]
 
-    bee_D1.Repair()
-    bee_S2.Repair()
+    child1.repair()
+    child2.repair()
 
-    bee_D1.dist = bee_D1.dist_calc()
-    bee_S2.dist = bee_S2.dist_calc()
+    child1.dist = child1.dist_calc()
+    child2.dist = child2.dist_calc()
     
 
 # Bee reproduction with two point crossover technique    
-def two_pts_crossover(bee_P1, bee_P2, bee_D1, bee_S2, lrg = 0):
+def two_pts_crossover(parent1, parent2, child1, child2, lrg = 0):
     
     if lrg == 0:
 
@@ -66,48 +59,11 @@ def two_pts_crossover(bee_P1, bee_P2, bee_D1, bee_S2, lrg = 0):
 
         k = sorted(k)
 
-    bee_D1.route = bee_P1.route[0:k[0]] + bee_P2.route[k[0]:k[1]] + bee_P1.route[k[1]:52] 
-    bee_S2.route = bee_P2.route[0:k[0]] + bee_P1.route[k[0]:k[1]] + bee_P2.route[k[1]:52]
+    child1.route = parent1.route[0:k[0]] + parent2.route[k[0]:k[1]] + parent1.route[k[1]:52] 
+    child2.route = parent2.route[0:k[0]] + parent1.route[k[0]:k[1]] + parent2.route[k[1]:52]
 
-    bee_D1.Repair()
-    bee_S2.Repair()
+    child1.repair()
+    child2.repair()
 
-    bee_D1.dist = bee_D1.dist_calc()
-    bee_S2.dist = bee_S2.dist_calc()
-
-
-# Bee reproduction with other two point crossover technique    
-def two_pts_crossover_bis(bee_P1, bee_P2, bee_D1, bee_S2, lrg = 0):
-    
-    if lrg == 0:
-
-        k = sorted(random.sample(range(2, 51), 2))
-    
-    else:
-        k = []
-        k.append(random.randint(2, 51))
-        
-        if k[0] >= 26:
-            k.append(max(1, k[0]-lrg))
-        else:
-            k.append(min(50, k[0]+lrg))
-
-        k = sorted(k)
-
-    tmp1 = []
-    tmp2 = []
-
-    for i in range(k[0]):
-        tmp1.append([500, 500])
-    
-    for i in range(k[1],53):
-        tmp2.append([500, 500])
-
-    bee_D1.route = tmp1 + bee_P2.route[k[0]:k[1]] + tmp2 
-    bee_S2.route = tmp1 + bee_P1.route[k[0]:k[1]] + tmp2
-
-    bee_D1.Repair()
-    bee_S2.Repair()
-
-    bee_D1.dist = bee_D1.dist_calc()
-    bee_S2.dist = bee_S2.dist_calc()
+    child1.dist = child1.dist_calc()
+    child2.dist = child2.dist_calc()

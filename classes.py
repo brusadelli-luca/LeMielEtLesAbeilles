@@ -1,5 +1,5 @@
-from functions import *
 import random
+from functions import manhattan
 
 # Bee class creation : 
 class Bee():
@@ -20,7 +20,7 @@ class Bee():
 
 
     # Replaces double coordinates (= genes) with missing coordinates
-    def Repair(self):
+    def repair(self):
         field = self.field
         missing = []
 
@@ -36,7 +36,7 @@ class Bee():
         
 
     # Swaps two coordinates (= genes) in bee route
-    def Mutation(self,rate=0):
+    def mutation(self,rate=0):
         if random.random() < rate:
             k = random.sample(range(1, 51), 2)
             tmp = self.route[k[0]]
@@ -69,10 +69,10 @@ class Hive():
         for i in range(100):
             self.bees.append(Bee(field))
         
-        self.Selection()
+        self.selection()
 
     # Bee selection method : roulette / random / sort
-    def Selection(self):
+    def selection(self):
         if self.method == 'roulette':
             # Bees are ranked by distance (best first) : position k = rank k
             self.bees = sorted(self.bees, key=lambda bee: bee.dist)
