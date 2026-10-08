@@ -19,7 +19,7 @@ python -m pip install pillow matplotlib
 
 ## Instructions
 * Flower coordinates are given
-* Set parameters list (see below).
+* Set parameters in main.py (see below).
 * Run main.py :
 
 ```
@@ -70,10 +70,6 @@ python main.py
   * Roulette : Chooses individuals randomly weighted by position in performance ranking. List is completed to 50 individuals with the remaining bees, sorted by performance.
 
 * sort_pop : Size of population used in Sort method to choose individuals (N). Default = 80
-
-### Comparison
-* param_list : Set parameter to be modified if comparison needed.
-  Warning : variable parameter to be set in loop (the value `param` is not used automatically : replace the parameter to compare by `param` in the loop).
 
 ### Evolution
 * gen_nb : Number of generations in evolution (default = 5000)
